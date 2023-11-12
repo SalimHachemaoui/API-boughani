@@ -1,15 +1,29 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 import os
 import threading
 import schedule
 import time
 import shutil
 
+
 from Algorithme.scraper import scrape_website, generate_summary
 from Algorithme.summarizer import extract_text_from_pdf, generate_summary
 
 # Initialize the FastAPI app
 app = FastAPI()
+#cros FastAPI
+origins = ["*"]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+
 @app.post("/scrape_and_summarize/")
 async def scrape_and_summarize(url: str):
     content = scrape_website(url)
